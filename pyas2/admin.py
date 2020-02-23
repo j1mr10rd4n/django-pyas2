@@ -75,7 +75,7 @@ class PartnerAdmin(admin.ModelAdmin):
         }),
         ('Advanced Settings', {
             'classes': ('collapse', 'wide'),
-            'fields': ('keep_filename', 'cmd_send', 'cmd_receive')
+            'fields': ('keep_filename', 'cmd_send', 'cmd_receive', 'cmd_error')
         }),
     )
     actions = ['send_message']

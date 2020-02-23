@@ -21,6 +21,7 @@ from pyas2lib.utils import extract_certificate_info
 
 from pyas2 import settings
 from pyas2.utils import run_post_send
+from pyas2.utils import run_post_failure
 from pyas2.utils import store_file
 
 logger = logging.getLogger('pyas2')
@@ -208,6 +209,15 @@ class Partner(models.Model):
             'Command executed after successful message receipt, replacements '
             'are $filename, $fullfilename, $sender, $recevier, $messageid and '
             'any message header such as $Subject')
+    )
+    cmd_error = models.TextField(
+        verbose_name=_('Command on Message Error'),
+        null=True,
+        blank=True,
+        help_text=_(
+            'Command executed after message fails (max_retries reached), replacements are '
+            '$filename, $sender, $recevier, $messageid and any message header '
+            'such as $Subject')
     )
 
     @property
@@ -420,6 +430,7 @@ class Message(models.Model):
                 else:
                     self.status = 'E'
                     self.detailed_status = f'Partner failed to process message: {detailed_status}'
+                    run_post_failure(self)
                 Mdn.objects.create_from_as2mdn(as2mdn=as2mdn, message=self, status='R')
         else:
             # No MDN requested mark message as success and run command

@@ -8,8 +8,8 @@ with open(os.path.join(root, 'README.rst')) as f:
     README = f.read()
 
 install_requires = [
-    'django>=2.1.9',
     'pyas2lib @ git+https://github.com/j1mr10rd4n/pyas2-lib@1.2.3-j1mr10rd4n#pyas2lib',
+    'django>=2.1.9,<3.0',
     'requests'
 ]
 

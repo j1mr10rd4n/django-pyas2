@@ -24,6 +24,7 @@ from pyas2.models import PrivateKey
 from pyas2.models import PublicCertificate
 from pyas2.utils import run_post_receive
 from pyas2.utils import run_post_send
+from pyas2.utils import run_post_failure
 from pyas2.forms import SendAs2MessageForm
 
 logger = logging.getLogger('pyas2')
@@ -103,6 +104,7 @@ class ReceiveAs2Message(View):
             else:
                 message.status = 'E'
                 message.detailed_status = f'Partner failed to process message: {detailed_status}'
+                run_post_failure(message)
             # Save the message and create the mdn
             message.save()
             Mdn.objects.create_from_as2mdn(as2mdn=as2mdn, message=message, status='R')

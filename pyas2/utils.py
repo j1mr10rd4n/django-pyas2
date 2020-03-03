@@ -29,6 +29,24 @@ def store_file(target_dir, filename, content, archive=False):
         tf.write(content)
     return full_filename
 
+def run_post_failure(message):
+    """ Execute commund after send failure """
+    command = message.partner.cmd_error
+    if command:
+        logger.debug('Execute post send failure command %s' % command)
+        # Create command template and replace variables in the command
+        command = Template(command)
+        variables = {
+            'filename': os.path.basename(message.payload.name),
+            'sender': message.organization.as2_name,
+            'receiver': message.partner.as2_name,
+            'messageid': message.message_id
+        }
+        variables.update(message.as2message.headers)
+
+        # Execute the command
+        os.system(command.safe_substitute(variables))
+
 
 def run_post_send(message):
     """ Execute command after successful send, can be used to notify

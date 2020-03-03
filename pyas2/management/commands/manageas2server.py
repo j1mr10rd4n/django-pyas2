@@ -8,6 +8,7 @@ from pyas2lib import Message as AS2Message
 
 from pyas2 import settings
 from pyas2.models import Message, Mdn
+from pyas2.utils import run_post_failure
 
 
 class Command(BaseCommand):
@@ -59,6 +60,7 @@ class Command(BaseCommand):
                 if failed_msg.retries > settings.MAX_RETRIES:
                     failed_msg.status = 'E'
                     failed_msg.save()
+                    run_post_failure(failed_msg)
                     continue
 
                 self.stdout.write(

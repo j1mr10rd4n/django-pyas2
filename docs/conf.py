@@ -22,7 +22,7 @@ copyright = '2019, Abhishek Ram'
 author = 'Abhishek Ram'
 
 # The full version, including alpha/beta/rc tags
-release = '1.1.2'
+release = '1.1.3'
 
 
 # -- General configuration ---------------------------------------------------
